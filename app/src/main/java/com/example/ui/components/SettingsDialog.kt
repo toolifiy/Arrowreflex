@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -119,12 +120,15 @@ fun SettingsDialog(
 
                         IconButton(
                             onClick = onDismiss,
-                            modifier = Modifier.size(36.dp)
+                            modifier = Modifier
+                                .size(36.dp)
+                                .background(Color(0xFFF0F0F4), CircleShape)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Close",
-                                tint = Color(0xFF888888)
+                                tint = Color(0xFF111111), // Bold Solid Black
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                     }

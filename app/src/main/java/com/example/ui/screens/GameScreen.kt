@@ -317,17 +317,51 @@ fun GameScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    VibrantGoldenCoin(size = if (isCompactScreen) 20.dp else 24.dp)
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "+1 COIN",
-                        fontSize = if (isCompactScreen) 15.sp else 17.sp,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 1.sp,
-                        color = Color(0xFF00C853)
-                    )
+                    // +1 Coin Badge
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0xFFE8F5E9))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        VibrantGoldenCoin(size = if (isCompactScreen) 18.dp else 22.dp)
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "+1 COIN",
+                            fontSize = if (isCompactScreen) 13.sp else 15.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 0.5.sp,
+                            color = Color(0xFF2E7D32)
+                        )
+                    }
+
+                    // +5 XP Badge
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0xFFFFF8E1))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = Color(0xFFD4AF37),
+                            modifier = Modifier.size(if (isCompactScreen) 16.dp else 19.dp)
+                        )
+                        Spacer(modifier = Modifier.width(3.dp))
+                        Text(
+                            text = "+5 XP",
+                            fontSize = if (isCompactScreen) 13.sp else 15.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 0.5.sp,
+                            color = Color(0xFFB8860B)
+                        )
+                    }
                 }
             }
         }

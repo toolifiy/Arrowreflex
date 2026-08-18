@@ -143,8 +143,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         soundManager.playSuccessTick()
         soundManager.playHitFeedback()
 
-        // 2. Add +1 Coin
+        // 2. Add +1 Coin & +5 XP per hit
         repository.addCoins(1)
+        repository.addXp(5)
 
         // 3. Record reaction time & check best record
         repository.recordReactionTime(reactionTimeMs)

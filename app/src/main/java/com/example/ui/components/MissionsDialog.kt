@@ -53,15 +53,16 @@ fun MissionsDialog(
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF09090C)), // Ultra dark black canvas
-            color = Color(0xFF09090C)
+                .background(Color.White)
+                .systemBarsPadding(), // Ensures full padding from navigation bar and status bar
+            color = Color.White
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
-                // 1. Title Header Bar (White, Black, Gold)
+                // 1. Title Header Bar (Clean White, Black text, Gold Star)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -74,7 +75,7 @@ fun MissionsDialog(
                             Icon(
                                 imageVector = Icons.Default.Star,
                                 contentDescription = null,
-                                tint = Color(0xFFFFD700),
+                                tint = Color(0xFFD4AF37),
                                 modifier = Modifier.size(24.dp)
                             )
                             Spacer(modifier = Modifier.width(6.dp))
@@ -83,30 +84,30 @@ fun MissionsDialog(
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Black,
                                 letterSpacing = 1.5.sp,
-                                color = Color.White
+                                color = Color(0xFF111111)
                             )
                         }
                         Text(
                             text = "Level up your reflexes to unlock new milestones!",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFF888888),
+                            color = Color(0xFF777777),
                             modifier = Modifier.padding(top = 2.dp)
                         )
                     }
 
-                    // Close Button (Golden)
+                    // Close Button (Solid Black 'X')
                     IconButton(
                         onClick = onDismiss,
                         modifier = Modifier
-                            .size(36.dp)
-                            .background(Color(0xFF1C1C24), CircleShape)
+                            .size(38.dp)
+                            .background(Color(0xFFF0F0F4), CircleShape)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close",
-                            tint = Color(0xFFD4AF37),
-                            modifier = Modifier.size(20.dp)
+                            tint = Color(0xFF111111), // Bold Solid Black
+                            modifier = Modifier.size(22.dp)
                         )
                     }
                 }
@@ -116,7 +117,7 @@ fun MissionsDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(1.dp)
-                        .background(Color(0x33D4AF37)) // Subtle gold divider line
+                        .background(Color(0xFFE8E8EE))
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -126,8 +127,8 @@ fun MissionsDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF141419))
-                        .border(1.dp, Color(0x22D4AF37), RoundedCornerShape(12.dp))
+                        .background(Color(0xFFF7F7FA))
+                        .border(1.dp, Color(0xFFE2E2E8), RoundedCornerShape(12.dp))
                         .padding(10.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
@@ -138,12 +139,13 @@ fun MissionsDialog(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                // 2. Scrollable Missions List (exactly 30 items)
+                // 2. Scrollable Missions List (Full height, no useless bottom button)
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    contentPadding = PaddingValues(bottom = 12.dp)
                 ) {
                     items(ArrowMissionCatalog.allMissions) { mission ->
                         val currentProgress = mission.checkProgress(
@@ -169,28 +171,6 @@ fun MissionsDialog(
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Close Button bottom bar
-                Button(
-                    onClick = onDismiss,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFD4AF37), // Solid Metallic Gold
-                        contentColor = Color.Black
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(46.dp)
-                ) {
-                    Text(
-                        text = "BACK TO HOME",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 1.sp
-                    )
-                }
             }
         }
     }
@@ -203,7 +183,7 @@ fun MissionStatItem(label: String, value: String) {
             text = value,
             fontSize = 14.sp,
             fontWeight = FontWeight.Black,
-            color = Color(0xFFD4AF37)
+            color = Color(0xFF111111)
         )
         Text(
             text = label.uppercase(),
@@ -223,19 +203,20 @@ fun MissionCardItem(
     isClaimed: Boolean,
     onClaimClick: () -> Unit
 ) {
-    // Beautiful item card, glowing border if completed but unclaimed
+    // Beautiful white item card, glowing golden border if completed but unclaimed
     val borderStroke = when {
-        isClaimed -> BorderStroke(1.dp, Color(0x11FFFFFF)) // Muted white
-        isCompleted -> BorderStroke(1.2.dp, Color(0xFFD4AF37)) // Metallic Gold glow
-        else -> BorderStroke(1.dp, Color(0xFF222226)) // Plain dark grey
+        isClaimed -> BorderStroke(1.dp, Color(0xFFE8E8EE))
+        isCompleted -> BorderStroke(1.5.dp, Color(0xFFD4AF37)) // Metallic Gold glow
+        else -> BorderStroke(1.dp, Color(0xFFE2E2E8))
     }
 
-    val cardBg = if (isClaimed) Color(0xFF101014) else Color(0xFF16161B)
+    val cardBg = if (isClaimed) Color(0xFFFAFAFC) else Color.White
 
     Card(
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = cardBg),
         border = borderStroke,
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isClaimed) 0.dp else 1.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -259,7 +240,7 @@ fun MissionCardItem(
                         text = mission.title,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Black,
-                        color = if (isClaimed) Color(0xFF777777) else Color.White
+                        color = if (isClaimed) Color(0xFF888888) else Color(0xFF111111)
                     )
 
                     // Reward badge
@@ -267,11 +248,11 @@ fun MissionCardItem(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
                             .background(
-                                if (isClaimed) Color(0xFF222226) else Color(0x22D4AF37)
+                                if (isClaimed) Color(0xFFEEEEF2) else Color(0xFFFFF9E6)
                             )
                             .border(
                                 1.dp,
-                                if (isClaimed) Color.Transparent else Color(0x55D4AF37),
+                                if (isClaimed) Color.Transparent else Color(0xFFD4AF37),
                                 RoundedCornerShape(8.dp)
                             )
                             .padding(horizontal = 6.dp, vertical = 3.dp)
@@ -280,7 +261,7 @@ fun MissionCardItem(
                             text = "+${mission.xpReward} XP",
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Black,
-                            color = if (isClaimed) Color(0xFF777777) else Color(0xFFD4AF37)
+                            color = if (isClaimed) Color(0xFF888888) else Color(0xFFB8860B)
                         )
                     }
                 }
@@ -291,7 +272,7 @@ fun MissionCardItem(
                 Text(
                     text = mission.desc,
                     fontSize = 11.sp,
-                    color = if (isClaimed) Color(0xFF555555) else Color(0xFFBBBBBB),
+                    color = if (isClaimed) Color(0xFF999999) else Color(0xFF555555),
                     fontWeight = FontWeight.Normal,
                     lineHeight = 14.sp
                 )
@@ -300,7 +281,7 @@ fun MissionCardItem(
 
                 // Bottom line: Horizontal progress bar and progress text
                 val fraction = if (mission.targetValue > 0) {
-                    currentProgress.toFloat() / mission.targetValue.toFloat()
+                    (currentProgress.toFloat() / mission.targetValue.toFloat()).coerceIn(0f, 1f)
                 } else 0f
 
                 Row(
@@ -313,7 +294,7 @@ fun MissionCardItem(
                             .weight(1f)
                             .height(6.dp)
                             .clip(RoundedCornerShape(3.dp))
-                            .background(Color(0xFF222226))
+                            .background(Color(0xFFEEEEF2))
                     ) {
                         // Progress fill
                         Box(
@@ -323,7 +304,7 @@ fun MissionCardItem(
                                 .clip(RoundedCornerShape(3.dp))
                                 .background(
                                     if (isClaimed) {
-                                        androidx.compose.ui.graphics.SolidColor(Color(0xFF555555))
+                                        androidx.compose.ui.graphics.SolidColor(Color(0xFFBBBBBB))
                                     } else {
                                         Brush.horizontalGradient(
                                             colors = listOf(Color(0xFFD4AF37), Color(0xFFFFD700))
@@ -339,7 +320,7 @@ fun MissionCardItem(
                         text = "$currentProgress / ${mission.targetValue}",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (isClaimed) Color(0xFF555555) else Color(0xFFD4AF37),
+                        color = if (isClaimed) Color(0xFF888888) else Color(0xFF111111),
                         textAlign = TextAlign.End,
                         modifier = Modifier.widthIn(min = 45.dp)
                     )
@@ -355,14 +336,14 @@ fun MissionCardItem(
                     isClaimed -> {
                         Surface(
                             shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFF222226),
+                            color = Color(0xFFEEEEF2),
                             modifier = Modifier.width(80.dp)
                         ) {
                             Text(
                                 text = "CLAIMED",
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF555555),
+                                color = Color(0xFF888888),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.padding(vertical = 8.dp)
                             )
@@ -394,8 +375,8 @@ fun MissionCardItem(
                     else -> {
                         Surface(
                             shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFF1F1F24),
-                            border = BorderStroke(1.dp, Color(0xFF2C2C35)),
+                            color = Color(0xFFFAFAFC),
+                            border = BorderStroke(1.dp, Color(0xFFE2E2E8)),
                             modifier = Modifier.width(80.dp)
                         ) {
                             Text(

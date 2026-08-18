@@ -246,16 +246,17 @@ fun HomeScreen(
                 }
             }
 
-            // Level progress fillbar (White, Black, Golden theme)
+            // Level progress fillbar (Clean White with Gold & Black theme)
             val currentLevel = totalXp / 1000
             val currentLevelXp = totalXp % 1000
             val targetLevelXp = 1000
-            val progressFraction = currentLevelXp.toFloat() / targetLevelXp.toFloat()
+            val progressFraction = (currentLevelXp.toFloat() / targetLevelXp.toFloat()).coerceIn(0f, 1f)
 
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF111115)), // Sleek premium black
-                border = androidx.compose.foundation.BorderStroke(1.2.dp, Color(0xFFD4AF37)), // Golden border
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = androidx.compose.foundation.BorderStroke(1.2.dp, Color(0xFFE2E2E8)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = if (isCompactScreen) 6.dp else 10.dp)
@@ -286,14 +287,14 @@ fun HomeScreen(
                                 text = "•  ${getLevelTitle(currentLevel)}",
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                color = Color(0xFF111111)
                             )
                         }
                         Text(
                             text = "${com.example.util.FormatUtils.formatCoins(currentLevelXp)} / 1,000 XP",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFFBBBBBB)
+                            color = Color(0xFF777777)
                         )
                     }
                     
@@ -304,7 +305,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .height(10.dp)
                             .clip(RoundedCornerShape(5.dp))
-                            .background(Color(0xFF222226))
+                            .background(Color(0xFFEEEEF2))
                     ) {
                         Box(
                             modifier = Modifier
@@ -314,9 +315,8 @@ fun HomeScreen(
                                 .background(
                                     androidx.compose.ui.graphics.Brush.horizontalGradient(
                                         colors = listOf(
-                                            Color(0xFF996515), // Dark Gold
                                             Color(0xFFD4AF37), // Metallic Gold
-                                            Color(0xFFFFD700)  // Bright Yellow Gold
+                                            Color(0xFFFFD700)  // Bright Gold
                                         )
                                     )
                                 )
@@ -490,53 +490,14 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(if (isCompactScreen) 8.dp else 12.dp))
 
-            // 3. Bottom Action Buttons: START GAME & ARROW SKINS
+            // 3. Bottom Action Buttons: START GAME (Top, Black) -> ARROW MISSIONS (Middle, White) -> ARROW SKINS SHOP (Bottom, White)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = if (isCompactScreen) 4.dp else 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Button(
-                    onClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                        showMissionsDialog = true
-                    },
-                    shape = RoundedCornerShape(16.dp),
-                    border = androidx.compose.foundation.BorderStroke(
-                        width = 1.5.dp,
-                        color = Color(0xFFD4AF37) // Metallic Gold Border
-                    ),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF111115), // Deep Black
-                        contentColor = Color(0xFFD4AF37)    // Gold text
-                    ),
-                    contentPadding = PaddingValues(vertical = if (isCompactScreen) 12.dp else 15.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("arrow_missions_button")
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = Color(0xFFD4AF37),
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "ARROW MISSIONS",
-                            fontSize = if (isCompactScreen) 14.sp else 16.sp,
-                            fontWeight = FontWeight.Black,
-                            letterSpacing = 1.5.sp,
-                            color = Color(0xFFD4AF37)
-                        )
-                    }
-                }
-
+                // 1st: START GAME (Black Button on Top)
                 Button(
                     onClick = {
                         view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
@@ -572,6 +533,48 @@ fun HomeScreen(
                     }
                 }
 
+                // 2nd: ARROW MISSIONS (White Button with Border, below Start Game)
+                OutlinedButton(
+                    onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                        showMissionsDialog = true
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    border = androidx.compose.foundation.BorderStroke(
+                        width = 1.2.dp,
+                        color = Color(0x44000000)
+                    ),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.White,
+                        contentColor = Color(0xFF111111)
+                    ),
+                    contentPadding = PaddingValues(vertical = if (isCompactScreen) 12.dp else 15.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("arrow_missions_button")
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = Color(0xFFD4AF37), // Golden Star Icon
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "ARROW MISSIONS",
+                            fontSize = if (isCompactScreen) 14.sp else 16.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 1.5.sp,
+                            color = Color(0xFF111111)
+                        )
+                    }
+                }
+
+                // 3rd: ARROW SKINS SHOP (White Button on Bottom)
                 OutlinedButton(
                     onClick = {
                         view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)

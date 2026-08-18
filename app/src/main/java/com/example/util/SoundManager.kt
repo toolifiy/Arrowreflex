@@ -60,8 +60,8 @@ class SoundManager(private val context: Context) {
     }
 
     /**
-     * Crisp, ultra-short, highly satisfying "tik/tak" click sound.
-     * Only plays on correct target clicks.
+     * Soft, thin, ultra-crisp, elegant keyboard/navigation click feedback sound.
+     * Engineered with gentle attack and quick decay for a premium tactile feel.
      */
     fun playSuccessTick() {
         if (isMuted) return
@@ -72,7 +72,7 @@ class SoundManager(private val context: Context) {
 
     private fun synthesizeAndPlaySuccessClick() {
         val sampleRate = 44100
-        val durationMs = 45 // Super responsive and short
+        val durationMs = 24 // Short, crisp, and thin like keyboard typing tap
         val numSamples = (durationMs * sampleRate / 1000)
         val sample = DoubleArray(numSamples)
         val generatedSnd = ShortArray(numSamples)
@@ -81,14 +81,17 @@ class SoundManager(private val context: Context) {
             val t = i.toDouble() / sampleRate
             val progress = i.toDouble() / numSamples
 
-            // Frequency sweeps downward from 1200Hz to 800Hz for a crisp woodblock "tik" sound
-            val freq = 1200.0 - (400.0 * progress)
-            val phase = 2.0 * Math.PI * freq * t
+            // Gentle high-frequency pop/tick sweeping down from 2200Hz to 1600Hz
+            // Mixed with a subtle secondary harmonic for a clean modern soft key click
+            val freq1 = 2200.0 - (600.0 * progress)
+            val freq2 = 3400.0 - (800.0 * progress)
+            val wave1 = Math.sin(2.0 * Math.PI * freq1 * t)
+            val wave2 = Math.sin(2.0 * Math.PI * freq2 * t)
 
-            // Exponential decay envelope for snappy attack and instant release
-            val envelope = Math.exp(-9.0 * progress)
+            // Ultra-steep exponential decay curve (soft, thin, no boomy bass or harsh mid tones)
+            val envelope = Math.exp(-18.0 * progress)
 
-            sample[i] = Math.sin(phase) * envelope
+            sample[i] = (0.7 * wave1 + 0.3 * wave2) * envelope * 0.45
         }
 
         for (i in 0 until numSamples) {
